@@ -133,11 +133,17 @@ function generateRow ($row) {
     for ($i=0; $i -lt 3; $i++){
 
         # draw two spaces and append the appropriate space/marker stored in $gameBoard 
-        $rowString += "  " + $gameBoard[$startIndex+$i]  
+        if ($gameBoard[$startIndex+$i] -eq "X") {
+            Write-host ("  " + $gameBoard[$startIndex+$i]) -ForegroundColor Green -NoNewLine  
+        } elseif ($gameBoard[$startIndex+$i] -eq "O") {
+            Write-host ("  " + $gameBoard[$startIndex+$i]) -ForegroundColor Red -NoNewLine  
+        } else {
+            Write-host ("  " + $gameBoard[$startIndex+$i]) -ForegroundColor White -NoNewLine  
+        }
 
         # Draw vertical star dividers only after first two markers in row
         if ($i -ne 2){
-            $rowString += "  *"
+            Write-host ("  *") -ForegroundColor Cyan -NoNewLine
         }
 
     }
@@ -168,11 +174,23 @@ function playGame {
 
         # Print winning message if the current player has just won
         if ($gameOver) {
-            clear
-            Write-Host "`n`n`n`n`n`n`n`n`n"
-            Write-HostCenter ("Congratulations! Player " + $markers[$currentUser] + " has won!")
-            Write-Host "`n`n`n`n`n`n`n`n`n"
+            
             Start-Job -ScriptBlock { bash -c "afplay ./win.wav" } | Out-Null
+            Start-Job -ScriptBlock { bash -c "say 'Merry Christmas!'" } | Out-Null
+            Write-HostCenter ("Congratulations! Player " + $markers[$currentUser] + " has won!") -ForegroundColor Green
+            Write-HostCenter ("Merry Christmas!") -ForegroundColor Red
+            Write-HostCenter "       /\       "
+            Write-HostCenter "      /  \      "
+            Write-HostCenter "     /    \     "
+            Write-HostCenter "    /      \    "
+            Write-HostCenter "   /        \   "
+            Write-HostCenter "  /          \  "
+            Write-HostCenter " /            \ "
+            Write-HostCenter "/______________\"
+            Write-HostCenter "       ||       "
+
+            
+            
         }elseif ($numTurns -ge 9){
             $gameOver = $true
             "The game has  ended in a tie!"
@@ -245,7 +263,7 @@ function drawBoard {
         # every fourth row is a horizontal divider row 
         if ($i % 4 -eq 0){
     
-            "*" * 18  # all *** for dividing lines
+            Write-Host ("*" * 18)  -ForegroundColor Cyan
            
         # rows 2, 6, 10 contain X/O markers
         }elseif ($i%2 -eq 0){     
@@ -254,7 +272,7 @@ function drawBoard {
         
         # all other rows are the same space/star pattern
         }else { 
-            "     *" * 2 
+            Write-Host ("     *" * 2)  -ForegroundColor Cyan
         }
         
     }
