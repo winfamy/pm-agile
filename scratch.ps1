@@ -1,0 +1,1 @@
+Start-Job -ScriptBlock { bash -c "afplay ./guessed.mp3" } | Out-Null

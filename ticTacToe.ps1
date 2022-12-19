@@ -168,7 +168,11 @@ function playGame {
 
         # Print winning message if the current player has just won
         if ($gameOver) {
-            "Congratulations! Player " + $markers[$currentUser] + " has won!"
+            clear
+            Write-Host "`n`n`n`n`n`n`n`n`n"
+            Write-HostCenter ("Congratulations! Player " + $markers[$currentUser] + " has won!")
+            Write-Host "`n`n`n`n`n`n`n`n`n"
+            Start-Job -ScriptBlock { bash -c "afplay ./win.wav" } | Out-Null
         }elseif ($numTurns -ge 9){
             $gameOver = $true
             "The game has  ended in a tie!"
@@ -218,7 +222,7 @@ function playTurn {
 
     # once a valid selection has been made, update the corresponding index $gameBoard array
     $gameBoard[$square] = $markers[$currentUser]
-
+    Start-Job -ScriptBlock { bash -c "afplay ./open.mp3" } | Out-Null
 }
 
 function drawBoard {
@@ -257,7 +261,35 @@ function drawBoard {
 
 }
 
+function playSound ($wav) {
+    Start-Job -ScriptBlock { bash -c "afplay $wav" } | Out-Null
+}
+
+function Write-HostCenter { param($Message) Write-Host ("{0}{1}" -f (' ' * (([Math]::Max(0, $Host.UI.RawUI.BufferSize.Width / 2) - [Math]::Floor($Message.Length / 2)))), $Message) }
+
 # ------------------------- Start Game ---------------------------------- # 
+clear
+" _  _  _       _                                         _______ _       
+(_)(_)(_)     | |                            _          (_______|_)      
+ _  _  _ _____| | ____ ___  ____  _____    _| |_ ___        _    _  ____ 
+| || || | ___ | |/ ___) _ \|    \| ___ |  (_   _) _ \      | |  | |/ ___)
+| || || | ____| ( (__| |_| | | | | ____|    | || |_| |     | |  | ( (___ 
+ \_____/|_____)\_)____)___/|_|_|_|_____)     \__)___/      |_|  |_|\____)
+                                                                         
+          _______                      _______          
+         (_______)                    (_______)         
+ _____       _ _____  ____    _____       _  ___  _____ 
+(_____)     | (____ |/ ___)  (_____)     | |/ _ \| ___ |
+            | / ___ ( (___               | | |_| | ____|
+            |_\_____|\____)              |_|\___/|_____)"
+"
+
+
+"
+
+#Wait until ready to begin
+
+read-host “Press ENTER to continue...”
 
 playGame # start the game by calling the playGame function
 
