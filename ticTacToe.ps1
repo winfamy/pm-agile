@@ -168,7 +168,28 @@ function playGame {
 
         # Print winning message if the current player has just won
         if ($gameOver) {
-            "Congratulations! Player " + $markers[$currentUser] + " has won!"
+            
+            
+            Write-Host  "Congratulations! Player " + $markers[$currentUser] + " has won!" -ForegroundColor Green
+            Write-Host "Merry Christmas!" -ForegroundColor Red
+
+            $tree = @"
+                   /\
+                  /  \
+                 /    \
+                /      \
+               /        \
+              /          \
+             /            \
+            /______________\
+                   ||           
+            "@
+
+            Write-Host $tree
+           
+            
+            
+            
         }elseif ($numTurns -ge 9){
             $gameOver = $true
             "The game has  ended in a tie!"
